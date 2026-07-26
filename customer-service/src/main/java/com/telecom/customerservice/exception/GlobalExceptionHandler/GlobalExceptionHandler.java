@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,13 +16,16 @@ import com.telecom.customerservice.exception.ResourceNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	private static final Logger log =
+	        LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<Object> handleResourceNotfound(ResourceNotFoundException ex){
-
+		log.error("Resource not found : {}", ex.getMessage());
 		Map<String,Object> response=new HashMap<>();
-			response.put("timestamp", response);
-			response.put("Status", response);
+			response.put("timestamp", LocalDateTime.now());
+			response.put("Status", HttpStatus.NOT_FOUND.value());
 			response.put("message", ex.getMessage());
 		
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
@@ -28,6 +33,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidation(MethodArgumentNotValidException ex) {
 
+		log.error("MethodArgumentNotValidException", ex);
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult().getFieldErrors()
@@ -39,6 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception ex) {
 
+    	log.error("Exception", ex);
         Map<String, Object> response = new HashMap<>();
         response.put("timestamp", LocalDateTime.now());
         response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());

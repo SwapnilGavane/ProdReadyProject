@@ -109,4 +109,12 @@ public class Customer {
     public void setActivationDate(LocalDate activationDate) {
         this.activationDate = activationDate;
     }
+
+	@Override
+	public String toString() {
+		return "Customer [customerId=" + customerId + ", msisdn=" + msisdn + ", customerName=" + customerName
+				+ ", customerType=" + customerType + ", circle=" + circle + ", email=" + email + ", status=" + status
+				+ ", kycStatus=" + kycStatus + ", activationDate=" + activationDate + "]";
+	}
+    
 }
