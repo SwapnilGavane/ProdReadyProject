@@ -2,6 +2,8 @@ package com.telecom.customerservice.impl.CustomerServiceImpl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.telecom.customerservice.dto.CustomerRequest;
@@ -15,6 +17,9 @@ import com.telecom.customerservice.service.CustomerService;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+	private static final Logger logger =  LoggerFactory.getLogger(CustomerServiceImpl.class);
+
+	
 	private final CustomerRepository customerRepository;
 
 	public CustomerServiceImpl(CustomerRepository customerRepository) {
@@ -37,6 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerResponse getCustomerByMsisdn(String msisdn) {
+		logger.info("Customer created successfully : {}", msisdn);
 		Customer customer=customerRepository.findByMsisdn(msisdn).orElseThrow(()-> new ResourceNotFoundException("No Customer found with msisdn:"+msisdn));
 		return CustomerMapper.toResponse(customer);
 	}
