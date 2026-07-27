@@ -16,7 +16,6 @@ public class CustomerMapper {
     public static Customer toEntity(CustomerRequest request) {
 
         Customer customer = new Customer();
-
         customer.setMsisdn(request.getMsisdn());
         customer.setCustomerName(request.getCustomerName());
         customer.setCustomerType(request.getCustomerType());
@@ -32,7 +31,6 @@ public class CustomerMapper {
     public static CustomerResponse toResponse(Customer customer) {
 
         CustomerResponse response = new CustomerResponse();
-
         response.setCustomerId(customer.getCustomerId());
         response.setMsisdn(customer.getMsisdn());
         response.setCustomerName(customer.getCustomerName());

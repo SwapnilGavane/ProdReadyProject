@@ -53,13 +53,10 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } finally {
-
             long executionTime = System.currentTimeMillis() - startTime;
-
             log.info("Outgoing Response | Status={} TimeTaken={} ms",
                     response.getStatus(),
                     executionTime);
-
             MDC.clear();
         }
     }
