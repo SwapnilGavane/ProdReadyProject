@@ -1,0 +1,15 @@
+product_id,product_code,product_name,category,price,validity,description,active,created_date
+1,PRE299,Unlimited 28 Days,PREPAID,299,28,Unlimited Calls + 2GB/Day,1,7/31/2026
+2,PRE399,Unlimited 56 Days,PREPAID,399,56,Unlimited Calls + 2GB/Day,1,7/31/2026
+3,PRE599,Unlimited 84 Days,PREPAID,599,84,Unlimited Calls + 2GB/Day,1,7/31/2026
+4,DATA19,1GB Booster,DATA,19,1,1GB Data Add-on,1,7/31/2026
+5,DATA49,6GB Booster,DATA,49,7,6GB Data Add-on,1,7/31/2026
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,

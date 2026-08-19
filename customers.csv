@@ -1,0 +1,6 @@
+customer_id,activation_date,circle,customer_name,customer_type,email,kyc_status,msisdn,status
+1,2026-07-26,Maharashtra,"Swapnil Gavane",PREPAID,swapnil@example.com,VERIFIED,9876543210,ACTIVE
+2,2026-07-26,Maharashtra,"Saranya Gavane",POSTPAID,saranyagavane@gmail.com,VERIFIED,8237157179,ACTIVE
+4,2026-07-26,Maharashtra,"Priyanka Gavane",POSTPAID,privankagavane@gmail.com,VERIFIED,9561813442,ACTIVE
+5,2026-07-26,Maharashtra,"Anita Gavane",POSTPAID,anitagavane45@gmail.com,VERIFIED,9860407267,ACTIVE
+6,2026-07-26,Maharashtra,"Pratik Gavane",PREPAID,pratikgavane@gmail.com,VERIFIED,8055518639,ACTIVE
