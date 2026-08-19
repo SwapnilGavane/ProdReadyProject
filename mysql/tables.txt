@@ -1,0 +1,26 @@
+Table: customers
+Columns:
+customer_id bigint AI PK 
+activation_date date 
+circle varchar(20) 
+customer_name varchar(255) 
+customer_type varchar(20) 
+email varchar(100) 
+kyc_status varchar(20) 
+msisdn varchar(10) 
+status varchar(20)
+
+customer_id, activation_date, circle, customer_name, customer_type, email, kyc_status, msisdn, status
+
+
+Table: products
+Columns:
+product_id bigint AI PK 
+product_code varchar(255) 
+product_name varchar(255) 
+category varchar(255) 
+price double 
+validity int 
+description varchar(255) 
+active tinyint(1) 
+created_date date
