@@ -1,0 +1,10 @@
+target/classes
+target/test-classes
+target/generated-sources
+target/generated-test-sources
+.git
+.settings
+.project
+.classpath
+.idea
+*.log

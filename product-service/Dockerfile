@@ -1,0 +1,11 @@
+FROM eclipse-temurin:21-jre
+
+LABEL maintainer="Swapnil Gavane"
+
+WORKDIR /app
+
+COPY target/product-service-1.0.0-SNAPSHOT.jar app.jar
+
+EXPOSE 8083
+
+ENTRYPOINT ["java","-jar","app.jar"]

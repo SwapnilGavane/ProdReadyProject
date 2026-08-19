@@ -1,0 +1,229 @@
+services:
+
+  ####################################################
+  # MySQL
+  ####################################################
+  mysql:
+    image: mysql:8.4
+    container_name: mysql
+
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: telecom_customer_db
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+
+    networks:
+      - telecom-network
+
+
+  ####################################################
+  # Config Server
+  ####################################################
+  config-server:
+    build:
+      context: ./config-server
+
+    image: config-server:${IMAGE_TAG:-v1}
+    container_name: config-server
+
+    restart: unless-stopped
+
+    ports:
+      - "8888:8888"
+
+    environment:
+      CONFIG_REPO: /config-repo
+
+    volumes:
+      - ../config-repo:/config-repo
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "-q",
+          "http://localhost:8888/actuator/health"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
+
+    networks:
+      - telecom-network
+
+
+  ####################################################
+  # Eureka Server
+  ####################################################
+  eureka-server:
+    build:
+      context: ./eureka-server
+
+    image: eureka-server:${IMAGE_TAG:-v1}
+    container_name: eureka-server
+
+    restart: unless-stopped
+
+    ports:
+      - "8761:8761"
+
+    environment:
+      CONFIG_SERVER_HOST: config-server
+
+    depends_on:
+      config-server:
+        condition: service_healthy
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "-q",
+          "http://localhost:8761/actuator/health"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
+
+    networks:
+      - telecom-network
+
+
+  ####################################################
+  # Customer Service
+  ####################################################
+  customer-service:
+    build:
+      context: ./customer-service
+
+    image: customer-service:${IMAGE_TAG:-v1}
+    container_name: customer-service
+
+    restart: unless-stopped
+
+    ports:
+      - "8082:8082"
+
+    environment:
+      MYSQL_HOST: host.docker.internal
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+
+      CONFIG_SERVER_HOST: config-server
+      EUREKA_HOST: eureka-server
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+    networks:
+      - telecom-network
+
+
+  ####################################################
+  # Product Service
+  ####################################################
+  product-service:
+    build:
+      context: ./product-service
+
+    image: product-service:${IMAGE_TAG:-v1}
+    container_name: product-service
+
+    restart: unless-stopped
+
+    ports:
+      - "8083:8083"
+
+    environment:
+      MYSQL_HOST: host.docker.internal
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+
+      CONFIG_SERVER_HOST: config-server
+      EUREKA_HOST: eureka-server
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+    networks:
+      - telecom-network
+
+
+  ####################################################
+  # API Gateway
+  ####################################################
+  api-gateway:
+    build:
+      context: ./api-gateway
+
+    image: api-gateway:${IMAGE_TAG:-v1}
+    container_name: api-gateway
+
+    restart: unless-stopped
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      CONFIG_SERVER_HOST: config-server
+      EUREKA_HOST: eureka-server
+
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+    networks:
+      - telecom-network
+
+
+####################################################
+# Volumes
+####################################################
+volumes:
+  mysql-data:
+
+
+####################################################
+# Network
+####################################################
+networks:
+  telecom-network:
+    driver: bridge
